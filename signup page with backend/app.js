@@ -23,5 +23,5 @@ function postdata(req,res){
         data:obj
     });
     console.log('backend ',obj);
-    res.redirect('/login.html',{root:__dirname })
+    // res.redirect('/login.html',{root:__dirname })
 }
