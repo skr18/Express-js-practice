@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const loginRouter = express.Router();
+const cookieparser = require('cookie-parser')
 app.use(express.json())
+app.use(cookieparser())
 app.use("/auth",loginRouter);
 app.listen(3000,()=>{
     console.log("Site is running")
@@ -12,11 +14,30 @@ loginRouter
 .get(getdata)
 .post(login)
 
+loginRouter
+.route('/user')
+.get(getd)
 
 
+async function getd(req,res){
+    let user = await mod.findOne()
+    if(req.cookies.isloggedin){
 
-function getdata(req,res){
-    res.sendFile('/index.html',{root:__dirname })
+        return res.json({
+            message:'You are admin'
+        })
+    }else{
+        return res.json({
+            message:'You are not admin'
+        })
+    }
+}
+
+async function getdata(req,res){
+    let user = await mod.findOne()
+    if(user){
+        res.json(user);
+    }
 }
 async function login(req,res){
     let data = req.body
@@ -26,6 +47,7 @@ async function login(req,res){
             let user =await mod.findOne({email:data.email})
             if(user.email==data.email){
                 if(user.password==data.password){
+                    res.cookie("isloggedin",true);
                     return res.json({
                         message:"user logedin"
                     } )
