@@ -10,18 +10,22 @@ app.listen(PORT,()=>{
 authRouter
 .route('/signup')
 .get(getdata)
-.post(postdata)
+.post(postdata,mid)
 
 function getdata(req,res){
     res.sendFile('/index.html',{root:__dirname })
+    console.log("mid called")
 }
-
-function postdata(req,res){
+function mid(req,res){
+    res.sendFile('/login.html',{root:__dirname });
+}
+function postdata(req,res,next){
     let obj = req.body
     res.json({
         message:"looged in",
         data:obj
     });
     console.log('backend ',obj);
+    // next();
     // res.redirect('/login.html',{root:__dirname })
 }
